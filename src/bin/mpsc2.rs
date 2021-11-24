@@ -12,15 +12,12 @@ async fn main() {
 
     tokio::spawn(async move {
         tx1.send(1).await.unwrap();
-
-        // This value will never be received. The send may or may not return
-        // `Err` depending on if the remote end closed first or not.
-        let _ = tx1.send(2).await;
+        tx1.send(2).await.unwrap();
     });
 
     tokio::spawn(async move {
         tx2.send(3).await.unwrap();
-        let _ = tx2.send(4).await;
+        tx2.send(4).await.unwrap();
     });
 
     let mut map = StreamMap::new();
